@@ -1,0 +1,16 @@
+{
+  "name": "Chicken",
+  "version": "0.0.1",
+  "author": "ayoungprogrammer",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.0",
+    "jade": "*",
+    "socket.io":"0.9.16",
+    "async":"*",
+    "node-uuid":"*"
+  }
+}
