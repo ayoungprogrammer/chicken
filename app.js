@@ -64,6 +64,7 @@ function Room(number){
 	this.active = false;
 	this.timer = 0;
 	this.start_time = 0;
+	this.winner = false;
 	this.add_players = function add_players(players){
 		this.cur_users = players;
 		this.timer = 3000;
@@ -82,6 +83,7 @@ Room.prototype.run = function(){
 		
 		case STATE_READY: 
 			if(usr1.ready==true && usr2.ready==true){
+				this.winner = false;
 				this.start_time = new Date().getTime();
 				io.sockets.in('room'+this.num).emit('start');
 				this.state = STATE_ON;
@@ -89,35 +91,53 @@ Room.prototype.run = function(){
 			}
 			break;
 		case STATE_ON:
-			if(!usr1.ready&&!usr2.ready){
-				sock1.emit('lose');
-				sock2.emit('lose');
+			if(!this.winner){
+				if(!usr1.ready&&!usr2.ready){
+					this.winner = true;
+					sock1.emit('tie');
+					sock2.emit('tie');
+					this.winner = true;
+				}
+				else if(!usr1.ready){
+					sock1.emit('lose');
+					usr1.disc = true;
+					this.winner = true;
+				}else if(!usr2.ready){
+					sock2.emit('lose');
+					usr2.disc = true;
+					this.winner = true;
+				}
+				else if((new Date().getTime()- this.start_time)/1000>=10){
+					usr1.disc = true;
+					usr2.disc = true;
+					sock1.emit('lose');
+					sock2.emit('lose');
+					this.state = STATE_OVER;
+				}
 			}
-			else if(!usr1.ready){
-				sock1.emit('lose');
-				usr1.disc = true;
-				this.state = STATE_OVER;
-			}else if(!usr2.ready){
-				sock2.emit('lose');
-				usr2.disc = true;
-				this.state = STATE_OVER;
-			}else if((new Date().getTime()- this.start_time)/1000>=10){
-				sock1.emit('lose');
-				sock2.emit('lose');
-				this.state = STATE_OVER;
-			}else {
-				
+			else {
+				if(!usr1.ready&&!usr2.ready){
+					this.state = STATE_OVER;
+				}
+				if((new Date().getTime()- this.start_time)/1000>=10){
+					this.state = STATE_OVER;
+				}
 			}
 			break;
 		case STATE_OVER: 
-			if(usr1.disc == false){
+			if(usr1.disc == false && usr2.disc == false){
+				sock1.emit('queue');
+				sock2.emit('queue');
+				queue.push(sock1);
+				queue.push(sock2);
+			}
+			else if(usr1.disc == false ){
 				sock1.emit('win');
 				usr1.wins++;
 				queue.push(sock1);
 				sock1.emit('queue');
-				
 			}
-			if(usr2.disc == false){
+			else if(usr2.disc == false){
 				sock2.emit('win');
 				usr2.wins++;
 				queue.push(sock2);

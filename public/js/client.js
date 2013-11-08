@@ -9,7 +9,7 @@ var socket = io.connect(hostname,username);
 var timerHandle;
 var startTime;
 
-socket.on('connect',function(){
+socket.on('connect',function(username){
 	socket.emit('username',username);
 	$('#log').append('Connected to server<br>');
 });
@@ -35,6 +35,13 @@ function tick(){
 	var t = Math.max(0,(10-(new Date().getTime()-startTime)/1000.0));
 	$('#timer').text('Time: '+t.toFixed(3)+'s');
 }
+
+socket.on('tie',function(data){
+	if(timerHandle){
+		clearInterval(timerHandle);
+	}
+	$('#log').append('tie');
+});
 
 socket.on('win',function(data){
 	if(timerHandle){
