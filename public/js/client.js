@@ -2,7 +2,9 @@ var username = prompt("Enter your username");
 
 var hostname = window.location.hostname;
 
-var socket = io.connect(hostname+':3000',username);
+
+
+var socket = io.connect(hostname,username);
 
 var timerHandle;
 var startTime;
