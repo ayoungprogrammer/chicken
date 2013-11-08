@@ -63,6 +63,7 @@ function Room(number){
 	this.cur_users = [];
 	this.active = false;
 	this.timer = 0;
+	this.start_time = 0;
 	this.add_players = function add_players(players){
 		this.cur_users = players;
 		this.timer = 3000;
@@ -81,7 +82,7 @@ Room.prototype.run = function(){
 		
 		case STATE_READY: 
 			if(usr1.ready==true && usr2.ready==true){
-			
+				this.start_time = new Date().getTime();
 				io.sockets.in('room'+this.num).emit('start');
 				this.state = STATE_ON;
 				console.log(usr1.username +" "+usr2.username);
@@ -100,7 +101,7 @@ Room.prototype.run = function(){
 				sock2.emit('lose');
 				usr2.disc = true;
 				this.state = STATE_OVER;
-			}else if(this.timer<0){
+			}else if((new Date().getTime()- this.start_time)/1000>=10){
 				sock1.emit('lose');
 				sock2.emit('lose');
 				this.state = STATE_OVER;
@@ -148,7 +149,7 @@ io.sockets.on('connection',function (socket){
 	
 	socket.on('set_name',function(username){
 		users[socket.id].username = username;
-		console.log(username+" has connected");
+		console.log(users[socket.id].username+" has connected");
 	});
 	socket.on('disconnect',function(){
 		users[socket.id].disc = true;	

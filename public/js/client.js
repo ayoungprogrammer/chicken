@@ -1,8 +1,15 @@
 var username = prompt("Enter your username");
-var socket = io.connect('127.0.0.1:3000',username);
+
+var hostname = window.location.hostname;
+
+var socket = io.connect(hostname+':3000',username);
+
+var timerHandle;
+var startTime;
+
 socket.on('connect',function(){
 	socket.emit('username',username);
-	$('#log').append('Connected to server\n');
+	$('#log').append('Connected to server<br>');
 });
 
 socket.on('queue',function(){
@@ -10,14 +17,27 @@ socket.on('queue',function(){
 });
  
 socket.on('join room',function(data){
-	$('#log').append('joined room '+data+'<br>');
+	$('#log').append('Joined room '+data+'<br>Press (space) to start.<br>');
 });
 
 socket.on('start',function(data){
 	$('#log').append('game start<br>');
+	if(timerHandle){
+		clearInterval(timerHandle);
+	}
+	startTime = new Date().getTime();
+	timerHandle = setInterval(tick,1);
 });
 
+function tick(){
+	var t = Math.max(0,(10-(new Date().getTime()-startTime)/1000.0));
+	$('#timer').text('Time: '+t.toFixed(3)+'s');
+}
+
 socket.on('win',function(data){
+	if(timerHandle){
+		clearInterval(timerHandle);
+	}
 	$('#log').append('you win<br>');
 });
 
