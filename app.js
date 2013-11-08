@@ -33,7 +33,7 @@ app.get('/', function(req,res){
 	res.sendfile('index.html');
 });
 
-var io = require('socket.io').listen(app.listen(cur_port));
+var io = require('socket.io').listen(app.listen(process.env.PORT ||cur_port));
 
 var queue = [];
 var users = {};
