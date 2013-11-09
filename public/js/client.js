@@ -9,8 +9,8 @@ var socket = io.connect(hostname,username);
 var timerHandle;
 var startTime;
 
-socket.on('connect',function(username){
-	socket.emit('username',username);
+socket.on('connect',function(){
+	socket.emit('set_name',username);
 	$('#log').append('Connected to server<br>');
 });
 
@@ -23,7 +23,7 @@ socket.on('join room',function(data){
 });
 
 socket.on('start',function(data){
-	$('#log').append('game start<br>');
+	$('#log').append('Game start<br>'+data[0]+' vs '+data[1]+'<br');
 	if(timerHandle){
 		clearInterval(timerHandle);
 	}
@@ -63,7 +63,7 @@ function checkKey(e){
 		socket.emit('release');
 		$('#log').append(' release<br>');
 	}
-	else alert(e.keyCode);
+	//else alert(e.keyCode);
 }
 
 if ($.browser.mozilla) {

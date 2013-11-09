@@ -85,9 +85,9 @@ Room.prototype.run = function(){
 			if(usr1.ready==true && usr2.ready==true){
 				this.winner = false;
 				this.start_time = new Date().getTime();
-				io.sockets.in('room'+this.num).emit('start');
+				io.sockets.in('room'+this.num).emit('start',[usr1.username,usr2.username]);
 				this.state = STATE_ON;
-				console.log(usr1.username +" "+usr2.username);
+				console.log(usr1.username +"vs"+usr2.username);
 			}
 			break;
 		case STATE_ON:
@@ -120,6 +120,14 @@ Room.prototype.run = function(){
 					this.state = STATE_OVER;
 				}
 				if((new Date().getTime()- this.start_time)/1000>=10){
+					if(usr1.ready){
+						usr1.disc = true;
+						sock1.emit('lose');
+					}
+					if(usr2.ready){
+						usr2.disc = true;
+						sock2.emit('lose');
+					}
 					this.state = STATE_OVER;
 				}
 			}
