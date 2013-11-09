@@ -45,9 +45,10 @@ var cur_room = 0;
 
 
 const NO_ROOM = -1;
-const STATE_READY = 0;
-const STATE_ON  = 1;
-const STATE_OVER = 2;
+const STATE_WAITING = 0;
+const STATE_READY = 1;
+const STATE_ON  = 2;
+const STATE_OVER = 3;
 function User(username){
 	this.username = username;
 	this.wins = 0;
@@ -66,12 +67,11 @@ function Room(number){
 	this.timer = 0;
 	this.start_time = 0;
 	this.winner = 0;
-	this.add_players = function add_players(players){
+	this.wait_time = 0;
+	this.setup = function(players){
+		this.wait_time = new Date().getTime();
 		this.cur_users = players;
-	}
-	this.remove_players = function remove_players(){
-		this.cur_users = [];
-		
+		this.state = STATE_READY;
 	}
 }
 Room.prototype.run = function(){
@@ -79,17 +79,40 @@ Room.prototype.run = function(){
 		var sock2 = this.cur_users[1];
 		var usr1 = users[sock1.id];
 		var usr2 = users[sock2.id];
+		
+		var cur_time = new Date().getTime();
+		
 		switch (this.state){
+		
+		
 		case STATE_READY: 
 			if(usr1.ready==true && usr2.ready==true){
 				this.winner = 0;
 				this.timer = 5;
-				this.start_time = new Date().getTime();
+				this.start_time = cur_time;
 				io.sockets.in('room'+this.num).emit('start',[usr1.username,usr2.username]);
 				this.state = STATE_ON;
 				console.log(usr1.username +"vs"+usr2.username);
 				usr1.released = false;
 				usr2.released = false;
+			}else {
+				if((cur_time-this.wait_time)/1000>=5){
+					if(usr1.ready == false){
+						usr1.disc = true;
+						sock1.emit('lose');
+					}else {
+						sock1.emit('queue');
+						queue.push(sock1);
+					}
+					if(usr2.ready == false){
+						usr2.disc = true;
+						sock2.emit('lose');
+					}else {
+						sock2.emit('queue');
+						queue.push(sock2);
+					}
+					return;
+				}
 			}
 			break;
 		case STATE_ON:
@@ -102,7 +125,7 @@ Room.prototype.run = function(){
 				}else if(usr2.released){
 					this.winner = 1;
 				}
-				else if((new Date().getTime()- this.start_time)/1000>=this.timer){
+				else if((cur_time-this.start_time)/1000.0>=this.timer){
 					this.winner = 0;
 					this.state = STATE_OVER;
 				}
@@ -111,7 +134,7 @@ Room.prototype.run = function(){
 				if(usr1.released&&usr2.released){
 					this.state = STATE_OVER;
 				}
-				else if((new Date().getTime()- this.start_time)/1000>=this.timer){
+				else if((cur_time-this.start_time)/1000.0>=this.timer){
 					if(!usr1.released && this.winner == 1){
 						this.winner = 2;
 					}
@@ -123,7 +146,6 @@ Room.prototype.run = function(){
 			}
 			break;
 		case STATE_OVER: 
-			console.log('over');
 			if(this.winner == 3){
 				sock1.emit('tie');
 				sock2.emit('tie');
@@ -201,8 +223,6 @@ async.forever(
 			var usr1 = users[queue[0].id];
 			var usr2 = users[queue[1].id];
 			
-			
-			
 			if(usr1.disc == false && usr2.disc == false){
 			
 				if(!(active_rooms[cur_room]==true)){
@@ -215,7 +235,7 @@ async.forever(
 					sock2.emit('join room',cur_room);
 					usr1.room = usr2.room = cur_room;
 					console.log('Room '+cur_room);
-					rooms[cur_room].add_players([sock1,sock2]);
+					rooms[cur_room].setup([sock1,sock2]);
 					rooms[cur_room].run();
 					cur_room++;
 					cur_room %= 10;

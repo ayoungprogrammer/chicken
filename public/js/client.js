@@ -60,6 +60,9 @@ function checkKey(e){
 		$('#log').append(' space <br>');
 	}
 	else if (e.keyCode==13){
+		if(timerHandle){
+			clearInterval(timerHandle);
+		}
 		socket.emit('release');
 		$('#log').append(' release<br>');
 	}
