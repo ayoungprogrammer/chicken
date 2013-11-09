@@ -32,7 +32,7 @@ socket.on('start',function(data){
 });
 
 function tick(){
-	var t = Math.max(0,(10-(new Date().getTime()-startTime)/1000.0));
+	var t = Math.max(0,(5-(new Date().getTime()-startTime)/1000.0));
 	$('#timer').text('Time: '+t.toFixed(3)+'s');
 }
 

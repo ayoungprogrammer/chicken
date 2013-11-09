@@ -68,7 +68,6 @@ function Room(number){
 	this.winner = 0;
 	this.add_players = function add_players(players){
 		this.cur_users = players;
-		this.timer = 3000;
 	}
 	this.remove_players = function remove_players(){
 		this.cur_users = [];
@@ -81,10 +80,10 @@ Room.prototype.run = function(){
 		var usr1 = users[sock1.id];
 		var usr2 = users[sock2.id];
 		switch (this.state){
-		
 		case STATE_READY: 
 			if(usr1.ready==true && usr2.ready==true){
 				this.winner = 0;
+				this.timer = 5;
 				this.start_time = new Date().getTime();
 				io.sockets.in('room'+this.num).emit('start',[usr1.username,usr2.username]);
 				this.state = STATE_ON;
@@ -95,7 +94,7 @@ Room.prototype.run = function(){
 			break;
 		case STATE_ON:
 			if(this.winner==0){
-				if(usr1.released&&usr2.released){
+				if(usr1.released && usr2.released){
 					this.winner = 3;
 				}
 				else if(usr1.released){
@@ -103,7 +102,7 @@ Room.prototype.run = function(){
 				}else if(usr2.released){
 					this.winner = 1;
 				}
-				else if((new Date().getTime()- this.start_time)/1000>=10){
+				else if((new Date().getTime()- this.start_time)/1000>=this.timer){
 					this.winner = 0;
 					this.state = STATE_OVER;
 				}
@@ -112,11 +111,11 @@ Room.prototype.run = function(){
 				if(usr1.released&&usr2.released){
 					this.state = STATE_OVER;
 				}
-				else if((new Date().getTime()- this.start_time)/1000>=10){
-					if(!usr1.released&& winner == 1){
+				else if((new Date().getTime()- this.start_time)/1000>=this.timer){
+					if(!usr1.released && this.winner == 1){
 						this.winner = 2;
 					}
-					if(usr2.ready && winner == 2){
+					if(!usr2.released && this.winner == 2){
 						this.winner = 1;
 					}
 					this.state = STATE_OVER;
@@ -124,6 +123,7 @@ Room.prototype.run = function(){
 			}
 			break;
 		case STATE_OVER: 
+			console.log('over');
 			if(this.winner == 3){
 				sock1.emit('tie');
 				sock2.emit('tie');
@@ -138,7 +138,7 @@ Room.prototype.run = function(){
 				sock2.emit('win');
 				sock1.emit('lose');
 				usr1.disc = true;
-			}else if(this.winner == 3){
+			}else if(this.winner == 0){
 				sock1.emit('lose');
 				sock2.emit('lose');
 			}
@@ -151,7 +151,7 @@ Room.prototype.run = function(){
 				queue.push(sock2);
 			}
 			
-			active_rooms[this.room] = false;
+			active_rooms[this.num] = false;
 			return;
 		}
 		
