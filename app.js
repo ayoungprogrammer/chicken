@@ -54,6 +54,7 @@ function User(username){
 	this.disc = false;
 	this.room = NO_ROOM;
 	this.ready = false;
+	this.released = false;
 	
 }
 
@@ -64,7 +65,7 @@ function Room(number){
 	this.active = false;
 	this.timer = 0;
 	this.start_time = 0;
-	this.winner = false;
+	this.winner = 0;
 	this.add_players = function add_players(players){
 		this.cur_users = players;
 		this.timer = 3000;
@@ -83,74 +84,73 @@ Room.prototype.run = function(){
 		
 		case STATE_READY: 
 			if(usr1.ready==true && usr2.ready==true){
-				this.winner = false;
+				this.winner = 0;
 				this.start_time = new Date().getTime();
 				io.sockets.in('room'+this.num).emit('start',[usr1.username,usr2.username]);
 				this.state = STATE_ON;
 				console.log(usr1.username +"vs"+usr2.username);
+				usr1.released = false;
+				usr2.released = false;
 			}
 			break;
 		case STATE_ON:
-			if(!this.winner){
-				if(!usr1.ready&&!usr2.ready){
-					this.winner = true;
-					sock1.emit('tie');
-					sock2.emit('tie');
-					this.winner = true;
+			if(this.winner==0){
+				if(usr1.released&&usr2.released){
+					this.winner = 3;
 				}
-				else if(!usr1.ready){
-					sock1.emit('lose');
-					usr1.disc = true;
-					this.winner = true;
-				}else if(!usr2.ready){
-					sock2.emit('lose');
-					usr2.disc = true;
-					this.winner = true;
+				else if(usr1.released){
+					this.winner = 2;
+				}else if(usr2.released){
+					this.winner = 1;
 				}
 				else if((new Date().getTime()- this.start_time)/1000>=10){
-					usr1.disc = true;
-					usr2.disc = true;
-					sock1.emit('lose');
-					sock2.emit('lose');
+					this.winner = 0;
 					this.state = STATE_OVER;
 				}
 			}
 			else {
-				if(!usr1.ready&&!usr2.ready){
+				if(usr1.released&&usr2.released){
 					this.state = STATE_OVER;
 				}
-				if((new Date().getTime()- this.start_time)/1000>=10){
-					if(usr1.ready){
-						usr1.disc = true;
-						sock1.emit('lose');
+				else if((new Date().getTime()- this.start_time)/1000>=10){
+					if(!usr1.released&& winner == 1){
+						this.winner = 2;
 					}
-					if(usr2.ready){
-						usr2.disc = true;
-						sock2.emit('lose');
+					if(usr2.ready && winner == 2){
+						this.winner = 1;
 					}
 					this.state = STATE_OVER;
 				}
 			}
 			break;
 		case STATE_OVER: 
-			if(usr1.disc == false && usr2.disc == false){
-				sock1.emit('queue');
-				sock2.emit('queue');
-				queue.push(sock1);
-				queue.push(sock2);
+			if(this.winner == 3){
+				sock1.emit('tie');
+				sock2.emit('tie');
 			}
-			else if(usr1.disc == false ){
-				sock1.emit('win');
-				usr1.wins++;
-				queue.push(sock1);
-				sock1.emit('queue');
+			
+			else if(this.winner == 1){
+					sock1.emit('win');
+					sock2.emit('lose');
+					usr2.disc = true;
 			}
-			else if(usr2.disc == false){
+			else if (this.winner == 2){
 				sock2.emit('win');
-				usr2.wins++;
-				queue.push(sock2);
-				sock2.emit('queue');
+				sock1.emit('lose');
+				usr1.disc = true;
+			}else if(this.winner == 3){
+				sock1.emit('lose');
+				sock2.emit('lose');
 			}
+			if(!usr1.disc){
+				sock1.emit('queue');
+				queue.push(sock1);
+			}
+			if(!usr2.disc){
+				sock2.emit('queue');
+				queue.push(sock2);
+			}
+			
 			active_rooms[this.room] = false;
 			return;
 		}
@@ -185,13 +185,13 @@ io.sockets.on('connection',function (socket){
 		
 	});
 	socket.on('hold',function (){
-		console.log("HOLDING " +users[socket.id].room);
 		if(users[socket.id].room>=0){
 			users[socket.id].ready = true;
 		}
 	});
 	socket.on('release',function(){
 		users[socket.id].ready = false;
+		users[socket.id].released = true;
 	});
 });
 
