@@ -18,7 +18,7 @@ socket.on('queue',function(){
 	$('#log').append('In game queue<br>');
 });
  
-socket.on('join room',function(data){
+socket.on('join room',function(data,players){
 	$('#log').append('Joined room '+data+'<br>Press (space) to start.<br>');
 });
 

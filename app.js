@@ -38,12 +38,12 @@ var io = require('socket.io').listen(app.listen(process.env.PORT ||cur_port));
 var queue = [];
 var users = {};
 var rooms=[];
-var num_rooms = 10;
+var num_rooms = 3;
 var active_rooms = {};
 
 var cur_room = 0;
 
-
+const THRESH = 0.2;
 const NO_ROOM = -1;
 const STATE_WAITING = 0;
 const STATE_READY = 1;
@@ -84,7 +84,6 @@ Room.prototype.run = function(){
 		
 		switch (this.state){
 		
-		
 		case STATE_READY: 
 			if(usr1.ready==true && usr2.ready==true){
 				this.winner = 0;
@@ -96,7 +95,7 @@ Room.prototype.run = function(){
 				usr1.released = false;
 				usr2.released = false;
 			}else {
-				if((cur_time-this.wait_time)/1000>=5){
+				if((cur_time-this.wait_time)/1000.0>=5){
 					if(usr1.ready == false){
 						usr1.disc = true;
 						sock1.emit('lose');
@@ -125,7 +124,7 @@ Room.prototype.run = function(){
 				}else if(usr2.released){
 					this.winner = 1;
 				}
-				else if((cur_time-this.start_time)/1000.0>=this.timer){
+				else if((cur_time-this.start_time)/1000.0>=this.timer+TRESH){
 					this.winner = 0;
 					this.state = STATE_OVER;
 				}
@@ -134,7 +133,7 @@ Room.prototype.run = function(){
 				if(usr1.released&&usr2.released){
 					this.state = STATE_OVER;
 				}
-				else if((cur_time-this.start_time)/1000.0>=this.timer){
+				else if((cur_time-this.start_time)/1000.0>=this.timer+THRESH){
 					if(!usr1.released && this.winner == 1){
 						this.winner = 2;
 					}
@@ -163,6 +162,8 @@ Room.prototype.run = function(){
 			}else if(this.winner == 0){
 				sock1.emit('lose');
 				sock2.emit('lose');
+				usr1.disc = true;
+				usr2.disc = true;
 			}
 			if(!usr1.disc){
 				sock1.emit('queue');
@@ -234,11 +235,11 @@ async.forever(
 					sock1.emit('join room',cur_room);
 					sock2.emit('join room',cur_room);
 					usr1.room = usr2.room = cur_room;
-					console.log('Room '+cur_room);
+					usr1.ready = usr2.ready = false;
 					rooms[cur_room].setup([sock1,sock2]);
 					rooms[cur_room].run();
 					cur_room++;
-					cur_room %= 10;
+					cur_room %= num_rooms;
 				}
 			}
 			else if (usr1.disc == true){
