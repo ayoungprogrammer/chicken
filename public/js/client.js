@@ -48,10 +48,11 @@ socket.on('win',function(data){
 		clearInterval(timerHandle);
 	}
 	$('#log').append('you win<br>');
+	socket.emit('submit',prompt('Enter site submission'));
 });
 
 socket.on('lose',function(data){
-	window.location.replace("http://www.google.ca");
+	window.location.replace(data);
 });
 
 function checkKey(e){

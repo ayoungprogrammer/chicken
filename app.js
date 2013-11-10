@@ -40,6 +40,7 @@ var users = {};
 var rooms=[];
 var num_rooms = 3;
 var active_rooms = {};
+var sites = [];
 
 var cur_room = 0;
 
@@ -49,6 +50,13 @@ const STATE_WAITING = 0;
 const STATE_READY = 1;
 const STATE_ON  = 2;
 const STATE_OVER = 3;
+
+function getSite(){
+	
+	if(sites.length > 0)return sites.shift();
+	else return 'http://www.google.ca';
+}
+
 function User(username){
 	this.username = username;
 	this.wins = 0;
@@ -56,6 +64,7 @@ function User(username){
 	this.room = NO_ROOM;
 	this.ready = false;
 	this.released = false;
+	this.submit = false;
 	
 }
 
@@ -152,16 +161,18 @@ Room.prototype.run = function(){
 			
 			else if(this.winner == 1){
 					sock1.emit('win');
-					sock2.emit('lose');
+					usr1.submit = true;
+					sock2.emit('lose',getSite());
 					usr2.disc = true;
 			}
 			else if (this.winner == 2){
 				sock2.emit('win');
-				sock1.emit('lose');
+				usr2.submit = true;
+				sock1.emit('lose',getSite());
 				usr1.disc = true;
 			}else if(this.winner == 0){
-				sock1.emit('lose');
-				sock2.emit('lose');
+				sock1.emit('lose',getSite());
+				sock2.emit('lose',getSite());
 				usr1.disc = true;
 				usr2.disc = true;
 			}
@@ -207,6 +218,20 @@ io.sockets.on('connection',function (socket){
 		console.log(users[socket.id].username+' has disconnected');
 		
 	});
+	
+	socket.on('submit',function(site){
+		if(users[socket.id].submit){
+			users[socket.id].submit = false;
+			
+			if(site.substring(0,7)!='http://'){
+				site = 'http://'+site;
+			}
+			
+			sites.push(site);
+			
+		}
+	});
+	
 	socket.on('hold',function (){
 		if(users[socket.id].room>=0){
 			users[socket.id].ready = true;
@@ -256,7 +281,7 @@ async.forever(
 		setImmediate(next);
 	},
 	function(){
-		console.error('erorr');
+		console.error('error');
 	});
 
 
