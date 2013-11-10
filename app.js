@@ -124,7 +124,7 @@ Room.prototype.run = function(){
 				}else if(usr2.released){
 					this.winner = 1;
 				}
-				else if((cur_time-this.start_time)/1000.0>=this.timer+TRESH){
+				else if((cur_time-this.start_time)/1000.0>=this.timer+THRESH){
 					this.winner = 0;
 					this.state = STATE_OVER;
 				}
