@@ -20,6 +20,9 @@ socket.on('queue',function(){
  
 socket.on('join room',function(data,players){
 	$('#log').append('Joined room '+data+'<br>Press (space) to start.<br>');
+	startTime = new Date().getTime();
+	if(timerHandle)clearInterval(timerHandle);
+	timerHandle = setInterval(tick2);
 });
 
 socket.on('start',function(data){
@@ -35,6 +38,11 @@ function tick(){
 	var t = Math.max(0,(5-(new Date().getTime()-startTime)/1000.0));
 	$('#timer').text('Time: '+t.toFixed(3)+'s');
 }
+function tick2(){
+	var t = Math.max(0,(10-(new Date().getTime()-startTime)/1000.0));
+	$('#timer').text('Time to press space: '+t.toFixed(3)+'s');
+}
+
 
 socket.on('tie',function(data){
 	if(timerHandle){

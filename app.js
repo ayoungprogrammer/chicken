@@ -50,6 +50,7 @@ const STATE_WAITING = 0;
 const STATE_READY = 1;
 const STATE_ON  = 2;
 const STATE_OVER = 3;
+const WAIT_TIME = 10;
 
 function getSite(){
 	
@@ -104,17 +105,17 @@ Room.prototype.run = function(){
 				usr1.released = false;
 				usr2.released = false;
 			}else {
-				if((cur_time-this.wait_time)/1000.0>=5){
+				if((cur_time-this.wait_time)/1000.0>=WAIT_TIME){
 					if(usr1.ready == false){
 						usr1.disc = true;
-						sock1.emit('lose');
+						sock1.emit('lose',getSite());
 					}else {
 						sock1.emit('queue');
 						queue.push(sock1);
 					}
 					if(usr2.ready == false){
 						usr2.disc = true;
-						sock2.emit('lose');
+						sock2.emit('lose',getSite());
 					}else {
 						sock2.emit('queue');
 						queue.push(sock2);
