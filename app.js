@@ -223,7 +223,13 @@ io.sockets.on('connection',function (socket){
 		if(users[socket.id].submit){
 			users[socket.id].submit = false;
 			
-			if(site.substring(0,7)!='http://'){
+			if(site==undefined){
+				
+				
+				site = 'http://www.google.ca';
+			}
+			
+			else if(site.substring(0,7)!='http://'){
 				site = 'http://'+site;
 			}
 			
@@ -274,6 +280,9 @@ async.forever(
 				queue.shift();
 				queue.shift();
 				queue.unshift(usr1);
+			}else if(usr1.disc==true && usr2.disc == true){
+				queue.shift();
+				queue.shift();
 			}
 		}
 		
