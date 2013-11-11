@@ -274,6 +274,10 @@ async.forever(
 					cur_room %= num_rooms;
 				}
 			}
+			else if(usr1.disc==true && usr2.disc == true){
+				queue.shift();
+				queue.shift();
+			}
 			else if (usr1.disc == true){
 				queue.shift();
 			}
@@ -281,9 +285,6 @@ async.forever(
 				queue.shift();
 				queue.shift();
 				queue.unshift(usr1);
-			}else if(usr1.disc==true && usr2.disc == true){
-				queue.shift();
-				queue.shift();
 			}
 		}
 		
