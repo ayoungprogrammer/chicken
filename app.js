@@ -38,7 +38,7 @@ var io = require('socket.io').listen(app.listen(process.env.PORT ||cur_port));
 var queue = [];
 var users = {};
 var rooms=[];
-var num_rooms = 3;
+var num_rooms = 100;
 var active_rooms = {};
 var sites = [];
 
