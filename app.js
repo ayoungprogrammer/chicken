@@ -38,7 +38,7 @@ var io = require('socket.io').listen(app.listen(process.env.PORT ||cur_port));
 var queue = [];
 var users = {};
 var rooms=[];
-var num_rooms = 100;
+var num_rooms = 2;
 var active_rooms = {};
 var sites = [];
 
@@ -50,6 +50,7 @@ const STATE_WAITING = 0;
 const STATE_READY = 1;
 const STATE_ON  = 2;
 const STATE_OVER = 3;
+const STATE_CLEAN = 4;
 const WAIT_TIME = 10;
 
 function getSite(){
@@ -120,7 +121,7 @@ Room.prototype.run = function(){
 						sock2.emit('queue');
 						queue.push(sock2);
 					}
-					return;
+					this.state = STATE_CLEAN;
 				}
 			}
 			break;
@@ -198,8 +199,17 @@ Room.prototype.run = function(){
 				queue.push(sock2);
 			}
 			
+			this.state = STATE_CLEAN;
+			
+		case STATE_CLEAN:
+			usr1.room = NO_ROOM;
+			usr2.room = NO_ROOM;
+			sock1.leave('room'+this.num);
+			sock2.leave('room'+this.num);
+			
 			active_rooms[this.num] = false;
 			return;
+			
 		}
 		
 			

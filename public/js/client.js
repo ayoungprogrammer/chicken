@@ -22,7 +22,7 @@ socket.on('join room',function(data,players){
 	$('#log').append('Joined room '+data+'<br>Press (space) to start.<br>');
 	startTime = new Date().getTime();
 	if(timerHandle)clearInterval(timerHandle);
-	timerHandle = setInterval(tick2);
+	timerHandle = setInterval(tick2,1);
 });
 
 socket.on('start',function(data){
@@ -64,18 +64,19 @@ socket.on('lose',function(data){
 });
 
 function checkKey(e){
-	if(e.keyCode==32){
+	if(e.which=='32'){
 		socket.emit('hold');
 		$('#log').append(' space <br>');
 	}
-	else if (e.keyCode==13){
+}
+function releaseKey(e){
+	if(e.which=='32'){
 		if(timerHandle){
 			clearInterval(timerHandle);
 		}
 		socket.emit('release');
 		$('#log').append(' release<br>');
 	}
-	//else alert(e.keyCode);
 }
 
 if ($.browser.mozilla) {
@@ -83,3 +84,5 @@ if ($.browser.mozilla) {
 } else {
     $(document).keydown (checkKey);
 }
+
+$(document).keyup(releaseKey);
