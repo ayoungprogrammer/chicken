@@ -35,6 +35,9 @@ app.get('/', function(req,res){
 
 var io = require('socket.io').listen(app.listen(process.env.PORT ||cur_port));
 
+io.set('browser client minification', true);
+io.set('browser client etag', true);
+
 var queue = [];
 var users = {};
 var rooms=[];
@@ -174,12 +177,14 @@ Room.prototype.run = function(){
 			}
 			
 			else if(this.winner == 1){
+					usr1.wins++;
 					sock1.emit('win');
 					usr1.submit = true;
 					sock2.emit('lose',getSite());
 					usr2.disc = true;
 			}
-			else if (this.winner == 2){
+			else if(this.winner == 2){
+				usr2.wins++;
 				sock2.emit('win');
 				usr2.submit = true;
 				sock1.emit('lose',getSite());
@@ -190,14 +195,7 @@ Room.prototype.run = function(){
 				usr1.disc = true;
 				usr2.disc = true;
 			}
-			if(!usr1.disc){
-				sock1.emit('queue');
-				queue.push(sock1);
-			}
-			if(!usr2.disc){
-				sock2.emit('queue');
-				queue.push(sock2);
-			}
+			
 			
 			this.state = STATE_CLEAN;
 			
@@ -206,6 +204,7 @@ Room.prototype.run = function(){
 			usr2.room = NO_ROOM;
 			sock1.leave('room'+this.num);
 			sock2.leave('room'+this.num);
+			usr1.ready = usr2.ready = false;
 			
 			active_rooms[this.num] = false;
 			return;
@@ -246,7 +245,7 @@ io.sockets.on('connection',function (socket){
 		if(users[socket.id].submit){
 			users[socket.id].submit = false;
 			
-			if(site==undefined){
+			if(site==undefined||site == ''){
 				
 				
 				site = 'http://www.google.ca';
@@ -257,6 +256,10 @@ io.sockets.on('connection',function (socket){
 			}
 			
 			sites.push(site);
+			
+			
+			socket.emit('queue');
+			queue.push(socket);
 			
 		}
 	});

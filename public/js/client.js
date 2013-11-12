@@ -8,6 +8,8 @@ var socket = io.connect(hostname,username);
 
 var timerHandle;
 var startTime;
+var room;
+var wins=0;
 
 socket.on('connect',function(){
 	socket.emit('set_name',username);
@@ -19,6 +21,7 @@ socket.on('queue',function(){
 });
  
 socket.on('join room',function(data,players){
+	room = 1;
 	$('#log').append('Joined room '+data+'<br>Hold (space) to start.<br>');
 	startTime = new Date().getTime();
 	if(timerHandle)clearInterval(timerHandle);
@@ -26,7 +29,8 @@ socket.on('join room',function(data,players){
 });
 
 socket.on('start',function(data){
-	$('#log').append('Game start<br>'+data[0]+' vs '+data[1]+'<br');
+	room = 2;
+	$('#log').append('Game start<br>'+data[0]+' vs '+data[1]+'<br>');
 	if(timerHandle){
 		clearInterval(timerHandle);
 	}
@@ -48,7 +52,7 @@ socket.on('tie',function(data){
 	if(timerHandle){
 		clearInterval(timerHandle);
 	}
-	$('#log').append('tie');
+	$('#log').append('tie<br>');
 });
 
 socket.on('win',function(data){
@@ -57,6 +61,8 @@ socket.on('win',function(data){
 	}
 	$('#log').append('you win<br>');
 	socket.emit('submit',prompt('Enter site submission'));
+	wins++;
+	$('#wins').text('Wins: '+wins);
 });
 
 socket.on('lose',function(data){
@@ -69,11 +75,12 @@ function checkKey(e){
 	}
 }
 function releaseKey(e){
-	if(e.which=='32'){
+	if(e.which=='13'&&room == 2){
 		if(timerHandle){
 			clearInterval(timerHandle);
 		}
 		socket.emit('release');
+		room = 0;
 		//$('#log').append(' release<br>');
 	}
 }
