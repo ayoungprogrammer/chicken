@@ -70,7 +70,7 @@ socket.on('lose',function(data){
 });
 
 function checkKey(e){
-	if(e.which=='32'){
+	if(e.which=='13'){
 		socket.emit('hold');
 	}
 }

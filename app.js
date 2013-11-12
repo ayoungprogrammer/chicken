@@ -39,6 +39,8 @@ io.enable('browser client minification');  // send minified client
 io.enable('browser client etag');          // apply etag caching logic based on version number
 io.enable('browser client gzip');          // gzip the file
 
+io.set('transports', ['websocket', 'flashsocket']);
+
 var queue = [];
 var users = {};
 var rooms=[];
@@ -106,7 +108,7 @@ Room.prototype.run = function(){
 				this.start_time = cur_time;
 				io.sockets.in('room'+this.num).emit('start',[usr1.username,usr2.username]);
 				this.state = STATE_ON;
-				console.log(usr1.username +"vs"+usr2.username);
+				//console.log(usr1.username +"vs"+usr2.username);
 				usr1.released = false;
 				usr2.released = false;
 			}else {
