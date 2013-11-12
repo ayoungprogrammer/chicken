@@ -11,6 +11,8 @@
 
 ## Developing
 
+To deploy on Heroku, you must run the command:
+heroku labs:enable websockets
 
 
 ### Tools
