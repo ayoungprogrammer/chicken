@@ -35,8 +35,9 @@ app.get('/', function(req,res){
 
 var io = require('socket.io').listen(app.listen(process.env.PORT ||cur_port));
 
-io.set('browser client minification', true);
-io.set('browser client etag', true);
+io.enable('browser client minification');  // send minified client
+io.enable('browser client etag');          // apply etag caching logic based on version number
+io.enable('browser client gzip');          // gzip the file
 
 var queue = [];
 var users = {};
