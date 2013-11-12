@@ -19,7 +19,7 @@ socket.on('queue',function(){
 });
  
 socket.on('join room',function(data,players){
-	$('#log').append('Joined room '+data+'<br>Press (space) to start.<br>');
+	$('#log').append('Joined room '+data+'<br>Hold (space) to start.<br>');
 	startTime = new Date().getTime();
 	if(timerHandle)clearInterval(timerHandle);
 	timerHandle = setInterval(tick2,1);
@@ -66,7 +66,6 @@ socket.on('lose',function(data){
 function checkKey(e){
 	if(e.which=='32'){
 		socket.emit('hold');
-		$('#log').append(' space <br>');
 	}
 }
 function releaseKey(e){
@@ -75,7 +74,7 @@ function releaseKey(e){
 			clearInterval(timerHandle);
 		}
 		socket.emit('release');
-		$('#log').append(' release<br>');
+		//$('#log').append(' release<br>');
 	}
 }
 
