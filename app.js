@@ -44,7 +44,7 @@ io.set('transports', ['websocket', 'flashsocket']);
 var queue = [];
 var users = {};
 var rooms=[];
-var num_rooms = 2;
+var num_rooms = 10;
 var active_rooms = {};
 var sites = [];
 
@@ -73,6 +73,7 @@ function User(username){
 	this.ready = false;
 	this.released = false;
 	this.submit = false;
+	this.connected = false;
 	
 }
 
@@ -227,16 +228,19 @@ for(var i=0;i<num_rooms;i++){
 
 io.sockets.on('connection',function (socket){
 	//console.log(socket);
-	socket.emit('queue');
-	console.log(socket.id);
-	//socket.id = uuid.v4();
-	users[socket.id] = new User('undefined');
-	queue.push(socket);
 	
+	//console.log(socket.id);
+	//socket.id = uuid.v4();
+	users[socket.id] = new User(username);
 	
 	socket.on('set_name',function(username){
-		users[socket.id].username = username;
-		console.log(users[socket.id].username+" has connected");
+		if(!users[socket.id].connected){
+			users[socket.id].connected = true;
+			users[socket.id].username = username;
+			socket.emit('queue');
+			queue.push(socket);
+			console.log(users[socket.id].username+" has connected");
+		}
 	});
 	socket.on('disconnect',function(){
 		users[socket.id].disc = true;	
