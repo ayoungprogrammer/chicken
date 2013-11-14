@@ -22,15 +22,16 @@ socket.on('queue',function(){
  
 socket.on('join room',function(data,players){
 	room = 1;
-	send_msg('Joined room '+data+'<br>Hold (space) to start.<br>');
+	send_msg('Joined room '+data+'<br>'+players[0]+
+			' vs '+players[1]+'<br>Hold (space) to start.<br>');
 	startTime = new Date().getTime();
 	if(timerHandle)clearInterval(timerHandle);
 	timerHandle = setInterval(tick2,1);
 });
 
-socket.on('start',function(data){
+socket.on('start',function(){
 	room = 2;
-	send_msg('Game start<br>'+data[0]+' vs '+data[1]+'<br>');
+	send_msg('Game start<br>');
 	if(timerHandle){
 		clearInterval(timerHandle);
 	}
@@ -76,7 +77,7 @@ socket.on('lose',function(data){
 	window.location.replace(data);
 });
 
-function checkKey(e){send_msg('you win<br>');
+function checkKey(e){ //send_msg('you win<br>');
 	if(e.which=='32'){
 		socket.emit('hold');
 	}

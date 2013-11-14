@@ -107,7 +107,7 @@ Room.prototype.run = function(){
 				this.winner = 0;
 				this.timer = 5;
 				this.start_time = cur_time;
-				io.sockets.in('room'+this.num).emit('start',[usr1.username,usr2.username]);
+				io.sockets.in('room'+this.num).emit('start');
 				this.state = STATE_ON;
 				//console.log(usr1.username +"vs"+usr2.username);
 				usr1.released = false;
@@ -231,7 +231,7 @@ io.sockets.on('connection',function (socket){
 	
 	//console.log(socket.id);
 	//socket.id = uuid.v4();
-	users[socket.id] = new User(username);
+	users[socket.id] = new User('undefined');
 	
 	socket.on('set_name',function(username){
 		if(!users[socket.id].connected){
@@ -296,8 +296,8 @@ async.forever(
 					var sock2 = queue.shift();
 					sock1.join('room'+cur_room);
 					sock2.join('room'+cur_room);
-					sock1.emit('join room',cur_room);
-					sock2.emit('join room',cur_room);
+					sock1.emit('join room',cur_room,[usr1.username,usr2.username]);
+					sock2.emit('join room',cur_room,[usr1.username,usr2.username]);
 					usr1.room = usr2.room = cur_room;
 					usr1.ready = usr2.ready = false;
 					rooms[cur_room].setup([sock1,sock2]);
