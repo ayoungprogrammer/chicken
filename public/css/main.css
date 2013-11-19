@@ -40,7 +40,6 @@ body{
 	position:absolute;
 	top:0px;
 	background-size:100% 100%;
-	display:none;
 }
 #egg{
 	left:270px;
@@ -59,12 +58,12 @@ body{
 #egg1{
 	left:270px;
 	z-index:2;
-	background-image: url('../img/egg/egg1.png');
+	background-image: url('../img/egg/egg-left.png');
 }
 #egg2{
 	left:270px;
 	z-index:2;
-	background-image: url('../img/egg/egg2.png');
+	background-image: url('../img/egg/egg-right.png');
 }
 #crack1{
 	background-image:url('../img/cracks/1.png');

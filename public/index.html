@@ -57,6 +57,10 @@
 				<button type="submit" onclick="return true" class="btn">Submit</button>
 			</form>
 		</div>
+		
+		
+		<div id="egg1" class="eggs"></div>
+		<div id="egg2" class="eggs"></div>
 	
 		<div id="egg" class="eggs"></div>
 		<div id="crack1" class="crack-egg"></div>
@@ -67,9 +71,6 @@
 		<div id="crack6" class="crack-egg"></div>
 		<div id="crack7" class="crack-egg"></div>
 		<div id="crack8" class="crack-egg"></div>
-		
-		<div id="egg1" class="eggs"></div>
-		<div id="egg2" class="eggs"></div>
 		
 		<div class="form" id="url-div">
 			<form class="navbar-form" id="url">
@@ -101,18 +102,22 @@
 							$('#crack6').fadeIn(1000, "easeInOutBounce", function(){
 								$('#crack7').fadeIn(1000, "easeInOutBounce", function(){
 									$('#crack8').fadeIn(1000, "easeInOutBounce", function(){
-										$('#egg').hide('explode', {pieces: 16},2000);
-										$('#crack1').hide('explode', {pieces: 16}, 2000);
-										$('#crack2').hide('explode', {pieces: 16}, 2000);
-										$('#crack3').hide('explode', {pieces: 16}, 2000);
-										$('#crack4').hide('explode', {pieces: 16}, 2000);
-										$('#crack5').hide('explode', {pieces: 16}, 2000);
-										$('#crack6').hide('explode', {pieces: 16}, 2000);
-										$('#crack7').hide('explode', {pieces: 16}, 2000);
-										$('#crack8').hide('explode', {pieces: 16}, 2000);
-										$('#url-div').delay(2000).fadeIn(1000);
 										$('#egg1').show();
 										$('#egg2').show();
+										$('#egg1').animate ({left: "0px"}, 2000);
+										$('#egg2').animate ({left: "540px"}, 2000);
+										$('#egg1').fadeOut(1000);
+										$('#egg2').fadeOut(1000);
+										$('#egg').hide();
+										$('#crack1').hide();
+										$('#crack2').hide();
+										$('#crack3').hide();
+										$('#crack4').hide();
+										$('#crack5').hide();
+										$('#crack6').hide();
+										$('#crack7').hide();
+										$('#crack8').hide();
+										$('#url-div').delay(2200).fadeIn(1000);
 									});
 								});
 							});
