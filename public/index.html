@@ -1,10 +1,130 @@
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-<script src="/js/client.js"> </script>
+<html>
+	<head>
+		<title>Chicken!</title>
+		<meta content="chicken, fun, game" name="keywords">
+		<meta content="Don't chicken out." name="description">
+		<!--<link type="text/css" rel="stylesheet" href="styles.css">-->
+		<style type="text/css">
+		
+		</style>
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<link href='http://fonts.googleapis.com/css?family=Sintony:400,700' rel='stylesheet' type='text/css'>
+		<link href="bootstrap/css/bootstrap.css" rel = "stylesheet" type ="text/css" />
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+		<script src="http://malsup.github.com/jquery.form.js"></script> 
+	 
+		<script> 
+			// wait for the DOM to be loaded 
+			$(document).ready(function() { 
+				// bind 'myForm' and provide a simple callback function 
+				$('#username').ajaxSubmit(function() { 
+					alert("Thank you for your comment!"); 
+				}); 
+			}); 
+		</script> 
+	</head>
+	<body> <!--style="background-image: url('img/chicken.png'); background-repeat: repeat;"-->
+	<div class="container">
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				<ul class="nav">
+					<li class="active">
+						<a href="#">Home</a>
+					</li>
+					
+					<li>
+						<a href="#">Other Games</a>
+					</li>
+					<li>
+						<a href="#">FAQ</a>
+					</li>
+				</ul>    
+			</div>
+		</div>
+	</div>
+	<div class="hero-unit" id="header">
+		<h1>CHICKEN!</h1>
+		<h1><small>The Game</small></h1>
+	</div>
+	
+	<!--<div id="crack" class="common"> </div>-->
+	<div id="game">
+		<div class="form" id="username-div">
+			<form class="navbar-form" id="username" action="javascript:alert( 'success!' );">
+				<input type="text" placeholder="Username"><br/><br/>
+				<button type="submit" onclick="return true" class="btn">Submit</button>
+			</form>
+		</div>
+	
+		<div id="egg" class="eggs"></div>
+		<div id="crack1" class="crack-egg"></div>
+		<div id="crack2" class="crack-egg"></div>
+		<div id="crack3" class="crack-egg"></div>
+		<div id="crack4" class="crack-egg"></div>
+		<div id="crack5" class="crack-egg"></div>
+		<div id="crack6" class="crack-egg"></div>
+		<div id="crack7" class="crack-egg"></div>
+		<div id="crack8" class="crack-egg"></div>
+		
+		<div id="egg1" class="eggs"></div>
+		<div id="egg2" class="eggs"></div>
+		
+		<div class="form" id="url-div">
+			<form class="navbar-form" id="url">
+				<input type="text" placeholder="Place URL in queue"><br/><br/>
+				<button type="submit" onclick="return true" class="btn">Submit</button>
+			</form>
+		</div>
+		
+	</div>
+	</div>
+		
+	<div id="copyright">Copyright 2013 CHICKEN! All rights reserved.</div>
+	<script src="js/jquery-1.9.1.js"></script>	
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	<script>
 
-
-<div style="float:left;width:300px;height:250px;overflow-y:scroll;padding:10px;">
-   <div id="log"> Connecting... <br></div>
-</div>
-<div id="timer"> Time: 0s</div>
-<div id="wins">Wins: 0</div>
+	$(document).ready (function() {
+	$("form:first").submit(function(event) {
+	$('#username-div').fadeOut(2000);
+	$('#egg').delay(500).fadeIn(2000);
+	$(document).bind('keydown', function(e){
+		if (e.keyCode === 32){
+		$('#crack1').delay(3000).fadeIn(1000, "easeInOutBounce", function(){
+			$('#crack2').fadeIn(1000, "easeInOutBounce", function(){
+				$('#crack3').fadeIn(1000, "easeInOutBounce", function(){
+					$('#crack4').fadeIn(1000, "easeInOutBounce", function(){
+						$('#crack5').fadeIn(1000, "easeInOutBounce", function(){
+							$('#crack6').fadeIn(1000, "easeInOutBounce", function(){
+								$('#crack7').fadeIn(1000, "easeInOutBounce", function(){
+									$('#crack8').fadeIn(1000, "easeInOutBounce", function(){
+										$('#egg').hide('explode', {pieces: 16},2000);
+										$('#crack1').hide('explode', {pieces: 16}, 2000);
+										$('#crack2').hide('explode', {pieces: 16}, 2000);
+										$('#crack3').hide('explode', {pieces: 16}, 2000);
+										$('#crack4').hide('explode', {pieces: 16}, 2000);
+										$('#crack5').hide('explode', {pieces: 16}, 2000);
+										$('#crack6').hide('explode', {pieces: 16}, 2000);
+										$('#crack7').hide('explode', {pieces: 16}, 2000);
+										$('#crack8').hide('explode', {pieces: 16}, 2000);
+										$('#url-div').delay(2000).fadeIn(1000);
+										$('#egg1').show();
+										$('#egg2').show();
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+		}
+	});
+	});
+	});
+	</script>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+* {
+    font-family: 'Sintony', sans-serif, Arial;
+}
+body{
+	background-image: url("../img/chicken.png");
+}
+/*HEADER*/
+#header{
+	text-align:center;
+}
+
+/*GAME*/
+#game{
+	text-align:center;
+	position:relative;
+}
+.form{
+	width:400px;
+	height:220px;
+	position:absolute;
+	top:0px;
+	left:270px;
+	border: 5px solid rgb(100,100,100);
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.4);
+	text-align:center;
+	padding-top: 180px;
+	background:white;
+}
+#url-div{
+	z-index:99;
+	display:none;
+}
+#username-div{
+	z-index:100;
+}
+.eggs{
+	width:400px;
+	height:400px;
+	position:absolute;
+	top:0px;
+	background-size:100% 100%;
+	display:none;
+}
+#egg{
+	left:270px;
+	z-index:2;
+	background-image: url('../img/egg.png');
+}
+.crack-egg{
+	width:400px;
+	height:400px;
+	position:absolute;
+	top:0px;
+	left:270px;
+	z-index:3;
+	display:none;
+}
+#egg1{
+	left:270px;
+	z-index:2;
+	background-image: url('../img/egg/egg1.png');
+}
+#egg2{
+	left:270px;
+	z-index:2;
+	background-image: url('../img/egg/egg2.png');
+}
+#crack1{
+	background-image:url('../img/cracks/1.png');
+    background-size:100% 100%;
+}
+#crack2{
+	background-image: url('../img/cracks/2.png');
+	background-size:100% 100%;
+}
+#crack3{
+	background-image:url('../img/cracks/3.png');
+    background-size:100% 100%;
+}
+#crack4{
+	background-image: url('../img/cracks/4.png');
+	background-size:100% 100%;
+}
+#crack5{
+	background-image:url('../img/cracks/5.png');
+    background-size:100% 100%;
+}
+#crack6{
+	background-image: url('../img/cracks/6.png');
+	background-size:100% 100%;
+}
+#crack7{
+	background-image:url('../img/cracks/7.png');
+    background-size:100% 100%;
+}
+#crack8{
+	background-image: url('../img/cracks/8.png');
+	background-size:100% 100%;
+}
+/*#crack {
+  background:url('http://dangersoffracking.com/Fracking/cracks.png');
+    background-size:100% 100%;
+  display:none;
+  position: fixed;
+    width: 600px;
+    height: 500px;
+}*/
+/*COPYRIGHT*/
+#copyright {
+	position:relative;
+	top:400px;
+    font-size:100%;
+    text-align:center;
+    margin:20px 0 0 0;
+    padding:30px 0;
+}
