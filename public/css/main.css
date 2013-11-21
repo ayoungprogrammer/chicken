@@ -8,7 +8,12 @@ body{
 #header{
 	text-align:center;
 }
-
+/*LOG*/
+.log-container{
+	float:left;
+	height:80px;
+	padding:10px;
+}
 /*GAME*/
 #game{
 	text-align:center;
@@ -19,7 +24,7 @@ body{
 	height:220px;
 	position:absolute;
 	top:0px;
-	left:270px;
+	left:200px;
 	border: 5px solid rgb(100,100,100);
 	border-radius: 10px;
 	box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.4);
@@ -30,6 +35,11 @@ body{
 #url-div{
 	z-index:99;
 	display:none;
+}
+#url-div > span{
+	position:relative;
+	font-size:30px;
+	top:-50px;
 }
 #username-div{
 	z-index:100;
@@ -42,7 +52,7 @@ body{
 	background-size:100% 100%;
 }
 #egg{
-	left:270px;
+	left:200px;
 	z-index:2;
 	background-image: url('../img/egg.png');
 }
@@ -51,17 +61,17 @@ body{
 	height:400px;
 	position:absolute;
 	top:0px;
-	left:270px;
+	left:200px;
 	z-index:3;
 	display:none;
 }
 #egg1{
-	left:270px;
+	left:200px;
 	z-index:2;
 	background-image: url('../img/egg/egg-left.png');
 }
 #egg2{
-	left:270px;
+	left:200px;
 	z-index:2;
 	background-image: url('../img/egg/egg-right.png');
 }
@@ -108,7 +118,7 @@ body{
 /*COPYRIGHT*/
 #copyright {
 	position:relative;
-	top:400px;
+	top:50px;
     font-size:100%;
     text-align:center;
     margin:20px 0 0 0;

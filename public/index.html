@@ -35,7 +35,7 @@
 					</li>
 					
 					<li>
-						<a href="#">Other Games</a>
+						<a href="#">How to Play</a>
 					</li>
 					<li>
 						<a href="#">FAQ</a>
@@ -50,11 +50,19 @@
 	</div>
 	
 	<!--<div id="crack" class="common"> </div>-->
-	<div id="game">
-		<div class="form" id="username-div">
-			<form class="navbar-form" id="username" action="javascript:alert( 'success!' );">
-				<input type="text" placeholder="Username"><br/><br/>
-				<button type="submit" onclick="return true" class="btn">Submit</button>
+	<div class="row">
+	<div class="span2">
+	<div class="log-container" style="height:150px;">
+		<div id="log"> Connecting... <br></div>
+	</div>
+	<div class="log-container" id="timer"> Time: 0s</div>
+	<div class="log-container" id="wins">Wins: 0</div>
+	</div>
+	<div id="game" class="span8">
+		<div class="form" method="post" id="username-div">
+			<form class="navbar-form" id="username-form">
+				<input type="text" id="username" placeholder="Username"><br/><br/>
+				<div id="submit-username" class="btn">Submit</div>
 			</form>
 		</div>
 		
@@ -73,9 +81,10 @@
 		<div id="crack8" class="crack-egg"></div>
 		
 		<div class="form" id="url-div">
-			<form class="navbar-form" id="url">
-				<input type="text" placeholder="Place URL in queue"><br/><br/>
-				<button type="submit" onclick="return true" class="btn">Submit</button>
+			<span>You Win!</span>
+			<form class="navbar-form">
+				<input type="text" id="url" placeholder="Place URL in queue"><br/><br/>
+				<button type="submit" class="btn">Submit</button>
 			</form>
 		</div>
 		
@@ -84,17 +93,22 @@
 		
 	<div id="copyright">Copyright 2013 CHICKEN! All rights reserved.</div>
 	<script src="js/jquery-1.9.1.js"></script>	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/client-new.js"> </script>
 	<script>
 
 	$(document).ready (function() {
-	$("form:first").submit(function(event) {
-	$('#username-div').fadeOut(2000);
-	$('#egg').delay(500).fadeIn(2000);
-	$(document).bind('keydown', function(e){
+	$('#submit-username').click(function() {
+	$('#username-div').fadeOut(1000);
+	$('#egg').delay(500).fadeIn(1000);
+	$(document).bind('keypress', function(e){
 		if (e.keyCode === 32){
-		$('#crack1').delay(3000).fadeIn(1000, "easeInOutBounce", function(){
+		$('#crack1').fadeIn(1000, "easeInOutBounce", function(){
 			$('#crack2').fadeIn(1000, "easeInOutBounce", function(){
 				$('#crack3').fadeIn(1000, "easeInOutBounce", function(){
 					$('#crack4').fadeIn(1000, "easeInOutBounce", function(){
@@ -102,12 +116,6 @@
 							$('#crack6').fadeIn(1000, "easeInOutBounce", function(){
 								$('#crack7').fadeIn(1000, "easeInOutBounce", function(){
 									$('#crack8').fadeIn(1000, "easeInOutBounce", function(){
-										$('#egg1').show();
-										$('#egg2').show();
-										$('#egg1').animate ({left: "0px"}, 2000);
-										$('#egg2').animate ({left: "540px"}, 2000);
-										$('#egg1').fadeOut(1000);
-										$('#egg2').fadeOut(1000);
 										$('#egg').hide();
 										$('#crack1').hide();
 										$('#crack2').hide();
@@ -117,7 +125,16 @@
 										$('#crack6').hide();
 										$('#crack7').hide();
 										$('#crack8').hide();
+										
+										$('#egg1').show();
+										$('#egg2').show();
+										$('#egg1').animate ({left: "0px"}, 2000);
+										$('#egg2').animate ({left: "500px"}, 2000);
+										$('#egg1').fadeOut(1000);
+										$('#egg2').fadeOut(1000);
+										
 										$('#url-div').delay(2200).fadeIn(1000);
+										return;
 									});
 								});
 							});
