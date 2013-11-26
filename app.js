@@ -282,8 +282,9 @@ io.sockets.on('connection',function (socket){
 	});
 });
 
-async.forever(
-	function(next){
+//async.forever(
+setInterval(
+	function(){//function(next){
 		if(queue.length>=2){
 			var usr1 = users[queue[0].id];
 			var usr2 = users[queue[1].id];
@@ -320,12 +321,13 @@ async.forever(
 			}
 		}
 		
-		
-		setImmediate(next);
-	},
-	function(){
+		//process.nextTick(next());
+		//setImmediate(next);
+	},100);
+	
+	/*function(){
 		console.error('error');
-	});
+	});*/
 
 
 
