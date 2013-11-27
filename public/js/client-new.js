@@ -129,14 +129,14 @@ function checkKey(e){
 	if(e.which=='13'){
 		e.preventDefault();
 	}
-	if(e.which=='13'){
+	if(e.which=='32'){
 		$('#holdSpace').hide();
 		e.preventDefault();
 		if(socket!=null)socket.emit('hold');
 	}
 }
 function releaseKey(e){
-	if(e.which=='13'&&room == 2){
+	if(e.which=='32'&&room == 2){
 		if(timerHandle){
 			clearInterval(timerHandle);
 		}
