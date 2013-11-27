@@ -136,7 +136,7 @@ function checkKey(e){
 	}
 }
 function releaseKey(e){
-	if(e.which=='32'&&room == 2){
+	if(e.which=='13'&&room == 2){
 		if(timerHandle){
 			clearInterval(timerHandle);
 		}
