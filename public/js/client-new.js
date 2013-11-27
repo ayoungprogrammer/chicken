@@ -136,7 +136,7 @@ function checkKey(e){
 	}
 }
 function releaseKey(e){
-	if(e.which=='13'&&room == 2){
+	if(e.which=='32'&&room == 2){
 		if(timerHandle){
 			clearInterval(timerHandle);
 		}
@@ -152,10 +152,7 @@ function releaseKey(e){
 }
 
 
- $(document).keydown (checkKey);
 
-
-$(document).keyup(releaseKey);
 
 
 $(document).ready (function() {
@@ -167,6 +164,12 @@ $(document).ready (function() {
 		$('#egg').delay(500).fadeIn(1000);
 		
 		$('#holdSpace').hide();
+		
+		 $(document).keydown (checkKey);
+
+
+		 $(document).keyup(releaseKey);
+		
 	});
 	$('#submit-url').click(function(){
 		var site = document.getElementById('url').value;
