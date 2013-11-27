@@ -32,6 +32,7 @@ function init(){
 		if(timerHandle)clearInterval(timerHandle);
 		timerHandle = setInterval(tick2,1);
 		$("#versus").text(players[0]+" vs "+players[1]);
+		$("#holdSpace").show();
 	});
 	
 	socket.on('start',function(){
@@ -105,9 +106,9 @@ function init(){
 }
 
 function send_msg(msg){
-	$("#log").append(msg);
-	var elm = document.getElementById('log');
-	elm.scrollTop = elm.scrollHeight;
+	//$("#log").append(msg);
+	//var elm = document.getElementById('log');
+	//elm.scrollTop = elm.scrollHeight;
 	
 }
 
@@ -128,7 +129,8 @@ function checkKey(e){
 	if(e.which=='13'){
 		e.preventDefault();
 	}
-	if(e.which=='32'){
+	if(e.which=='13'){
+		$('#holdSpace').hide();
 		e.preventDefault();
 		if(socket!=null)socket.emit('hold');
 	}
@@ -160,8 +162,11 @@ $(document).ready (function() {
 	$('#submit-username').click(function() {
 		username = document.getElementById('username').value;
 		init();
+		$('#versus').text('');
 		$('#username-div').fadeOut(500);
 		$('#egg').delay(500).fadeIn(1000);
+		
+		$('#holdSpace').hide();
 	});
 	$('#submit-url').click(function(){
 		var site = document.getElementById('url').value;
@@ -170,8 +175,8 @@ $(document).ready (function() {
 		$('#url-div').fadeOut(500);
 		$('#egg1').fadeOut(500);
 		$('#egg2').fadeOut(500);
-		$('#egg1').delay(500).css({left:200});
-		$('#egg2').delay(500).css({left:200});
+		$('#egg1').delay(500).css({left:270});
+		$('#egg2').delay(500).css({left:270});
 		$('#egg').delay(500).fadeIn(1000);
 	});
 });

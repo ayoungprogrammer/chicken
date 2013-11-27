@@ -40,10 +40,9 @@
 		<h1><small>The Game</small></h1>
 	</div>
 	
-	<!--<div id="crack" class="common"> </div>-->
-	<div class="row">
-	<div class="span2">
 	<!--
+	<div class="span2">
+	
 	<div class="log-container" style="height:150px;">
 		<div id="log"> Connecting... <br></div>
 	</div>
@@ -51,7 +50,7 @@
 	<div class="log-container" id="wins">Wins: 0</div>
 	</div>-->
 	
-	<div id="game" class="span8">
+	<div id="game">
 		<div class="form" method="post" id="username-div">
 			<form class="navbar-form" id="username-form">
 				<input type="text" id="username" placeholder="Username"><br/><br/>
@@ -59,11 +58,19 @@
 			</form>
 		</div>
 		
-		<div id="versus"> </div>
+		<div id="versus">X vs Y</div>
 		
-		<div id="wins">Wins: 0</div>
+		<div style="position:absolute;top:450px;width:100%">
+		  <div class="center">
+		    <div id="wins">Wins: 0</div>
+		  </div>
+		</div>
 		
-		<div id="holdSpace">Hold Space to start</div>
+		<div style="position:absolute;top:200px;width:100%;z-index: 99">
+      <div class="center">
+        <div id="holdSpace">Hold Space to begin!</div>
+      </div>
+    </div>
 		
 		<div id="egg1" class="eggs"></div>
 		<div id="egg2" class="eggs"></div>
@@ -90,10 +97,11 @@
 		
 	</div>
 	</div>
-		
-	<div id="copyright">Copyright 2013 CHICKEN! All rights reserved.</div>
-	
-	
+	<div style="text-align: center">
+	 <div id="copyright">
+	   Copyright 2013 CHICKEN! All rights reserved.
+	 </div>
+	</div>
 	
 
 
