@@ -22,7 +22,7 @@ function init(){
 	});
 	
 	socket.on('queue',function(){
-		send_msg('In game queue<br>');
+		$('#versus').text("In game queue");
 	});
 	 
 	socket.on('join room',function(data,players){
@@ -38,6 +38,9 @@ function init(){
 	socket.on('start',function(){
 		room = 2;
 		send_msg('Game start<br>');
+		
+		$('#pbar_outer').show();
+		
 		if(timerHandle){
 			clearInterval(timerHandle);
 		}
@@ -76,6 +79,7 @@ function init(){
 		}
 		wins++;
 		$('#wins').text('Wins: '+wins);
+		$('#pbar_outer').hide();
 		$('#versus').text('');
 		
 		$('#url-div').delay(1000).fadeIn(1000);
@@ -114,12 +118,14 @@ function send_msg(msg){
 
 function tick(){
 	var t = Math.max(0,(5-(new Date().getTime()-startTime)/1000.0));
-	$('#timer').text('Time: '+t.toFixed(3)+'s');
+	//$('#timer').text('Time: '+t.toFixed(3)+'s');
+	$('#pbar_inner').css("width", (t/5*100)+"%");
 }
 
 function tick2(){
 	var t = Math.max(0,(10-(new Date().getTime()-startTime)/1000.0));
-	$('#timer').text('Time to press space: '+t.toFixed(3)+'s');
+	//$('#timer').text('Time to press space: '+t.toFixed(3)+'s');
+	
 }
 
 
@@ -164,6 +170,7 @@ $(document).ready (function() {
 		$('#egg').delay(500).fadeIn(1000);
 		
 		$('#holdSpace').hide();
+		$('#pbar_outer').hide();
 		
 		 $(document).keydown (checkKey);
 

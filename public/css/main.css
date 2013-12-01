@@ -26,7 +26,7 @@ body{
 	height:220px;
 	position:absolute;
 	top:0px;
-	left:250px;
+	left:270px;
 	border: 5px solid rgb(100,100,100);
 	border-radius: 10px;
 	box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.4);
@@ -75,6 +75,24 @@ body{
   display:inline-block;
   font-size: 20px;
 }
+
+#pbar_outer{
+  width: 300px;
+  height: 20px;
+  border: 1px solid grey;
+  z-index: 50;
+  display:inline-block;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  
+}
+#pbar_inner{
+  background-color: lightblue; 
+  z-index: 51; 
+  height: 100%; 
+  width: 0%;
+}
+
 #holdSpace{
   display:inline-block;
   font-size: 20px;
@@ -134,6 +152,9 @@ body{
     height: 500px;
 }*/
 /*COPYRIGHT*/
+
+
+
 #copyright {
   display: inline-block;
 	 bottom: 10px;
