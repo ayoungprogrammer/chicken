@@ -88,7 +88,7 @@ function init(){
 	});
 
 	socket.on('lose',function(data){
-		
+		$('#pbar_outer').hide();
 		for(var i=1;i<=8;i++)$('#crack'+i).show();
 		setTimeout(function(){
 			for(var i=1;i<=8;i++)$('#crack'+i).hide();
@@ -137,6 +137,7 @@ function checkKey(e){
 	}
 	if(e.which=='32'){
 		$('#holdSpace').hide();
+		$('#releaseSpace').show();
 		e.preventDefault();
 		if(socket!=null)socket.emit('hold');
 	}
@@ -151,6 +152,8 @@ function releaseKey(e){
 			window.clearTimeout(crackTimer[i-1]);
 		}
 		
+		$('#releaseSpace').hide();
+		
 		socket.emit('release');
 		room = 0;
 		//$('#log').append(' release<br>');
@@ -162,6 +165,9 @@ function releaseKey(e){
 
 
 $(document).ready (function() {
+	
+	$('#releaseSpace').hide();
+	
 	$('#submit-username').click(function() {
 		username = document.getElementById('username').value;
 		init();
@@ -171,6 +177,7 @@ $(document).ready (function() {
 		
 		$('#holdSpace').hide();
 		$('#pbar_outer').hide();
+		
 		
 		 $(document).keydown (checkKey);
 
